@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Traffic Offense Management</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style> div.fixed {
+      position: fixed;
+      width: 50%;
+      bottom: 10px;
+    }
+    div.a{
+      position: relative;
+      bottom:5px;
+      float: right;
+    }
+    </style>   
+  </head>
+  <body>
+    
+    <div class="container" style="width: 1350px;">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="text-center">Traffic Offense Management </h1>
+          <hr/>
+          <br/>
+          <div id="loader" style= "display: none;">
+            <p class="text-center">Loading...</p>
+          </div> 
+
+        <!-- MAIN HOME SCREEN --------------------------------------------------------------------------------------------------------------------->          
+
+          <div id="home1" style="float: left"> 
+            <!-- for list of violations -->
+            <img src="https://www.team-bhp.com/forum/attachments/street-experiences/1794207d1535479203t-list-traffic-offences-applicable-fine-fines-set-increase-10-fold-fb_img_1535478980058.jpg" alt="traffic fines" width= "350" height="600">   
+            <figcaption>Fine types: A (1-500rs) B(500-1000rs) C(1000-5000rs)</figcaption>
+          </div>
+          
+          <div id="home2" style="float: right">
+            <img src="https://www.team-bhp.com/forum/attachments/street-experiences/1794208d1535479227t-list-traffic-offences-applicable-fine-fines-set-increase-10-fold-fb_img_1535478989020.jpg" alt="traffic fines" width= "350" height="600" >
+            <figcaption>Ether rate: A(1 eth), B(2 eth), C(3 eth)</figcaption>
+          </div>
+
+          <div id="main" style="width:350px; float:right">
+            <hr/>
+            <h3><b><u>      Enter Area Code</u></b></h3><br><br>
+            <form name="Area" onsubmit="App.areaExists(); return false">
+
+              <label for="areac"> Enter area code:</label><br>
+              <input type="text" id="areac" name="area"><br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>  <br><br><br><br>
+            <label>ACPs in your city are :</label>
+          </div>
+          <div id="policedisplay"  style="position: relative; bottom: 0; width:450px;text-align: left;float: right">
+            <label>List of officers</label>
+            <table class="officer table" align="right">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Area</th>
+                  <th scope="col">Position</th>
+                  <th scope="col">Account</th>
+                </tr>
+              </thead>
+              <tbody id="ACPRecord">
+              </tbody>
+            </table>
+          </div>
+
+          <div id="account" style="position: relative">
+            <p id="accountAddress" style="position: fixed; bottom: 0; width:1250px; text-align: center">Your Account:</p>
+          </div> 
+
+          <!-- DCP SCREEN AND FOLLOWING OPTIONS -------------------------------------------------------------------------------------------->
+
+          <div id="DCP" style="width:325px;float: right;display: none">
+            <hr/>
+            <button onclick="AreaAdd()" name="AddArea" style="vertical-align:left"> Add Area </button><br>
+            <button onclick="ACPreplace()" name="ACPreplace" style="vertical-align:left"> Replace ACP </button><br>
+            <button onclick="AllPolice()" name="Police" style="vertical-align: left"> View all officers in city</button><br>
+            <button onclick="AllOffense()" name="RegisterU" style="vertical-align:left"> View all offenses in city </button><br>
+          </div>
+
+          <div id="AddArea" style="width: 325px;float: right;display: none">
+            <hr/>
+             <h3><b><u>      Add Area under Jurisdiction </u></b></h3><br><br>
+            <form name="Add Officer" onsubmit="App.AddArea(); return false">
+
+              <label for="newarea"> Enter new jurisdiction area :</label><br>
+              <input type="text" id="newarea" name="newarea"><br>
+              <label for="acpid"> Enter ACP id for new area:</label><br>
+              <input type="text" id="acpid" name="acpid"><br>
+              <label for="acpname">Enter ACP name :</label><br>
+              <input type="text" id="acpname" name="acpname"><br> 
+              <label for="acpacc"> Enter ACP account address :</label><br>
+              <input type="text" id="acpacc" name="acpacc"><br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            <hr/>
+            </form>
+          </div>
+
+          <div id="Replace" style="width:325px; float:right; display: none">
+            <hr/>
+            <h3><b><u>      Replace ACP </u></b></h3><br><br>
+            <form name="ReplaceAcp" onsubmit="App.ReplaceAcp(); return false">
+
+              <label for="oldacp"> Enter current ACP id :</label><br>
+              <input type="text" id="oldacp" name="oldacp"><br>
+              <label for="oldacpacc"> Enter current ACP account :</label><br>
+              <input type="text" id="oldacpacc" name="oldacpacc"><br>
+              <label for="reparea"> Enter area code :</label><br>
+              <input type="text" id="reparea" name="reparea"><br>
+              <label for="newacpid"> Enter new ACP id :</label><br>
+              <input type="text" id="newacpid" name="newacpid"><br>
+              <label for="newacpname">Enter ACP name :</label><br>
+              <input type="text" id="newacpname" name="newacpname"><br> 
+              <label for="newacpacc"> Enter ACP account address :</label><br>
+              <input type="text" id="newacpacc" name="newacpacc"><br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            <hr/>
+            </form>
+          </div>
+
+        <div id="AllPolice" style="width:450px;float:right;display: none">
+            <label><u>Police officers in your city</u> </label>
+          </div>
+
+          <div id="OffenseDisplay" style="width: 525px;float: right; display:none ">
+              <!-- need to insert table w button to pay fine-->
+            <label>Offense Records are mentioned below :</label>
+            <table class="offense table" align="center">
+              <thead>
+                <tr>
+                  <th scope="col">Offense ID</th>
+                  <th scope="col">Vehicle no.</th>
+                  <th scope="col">Area</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Officer ID</th>
+                  <th scope="col">License</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Fine Paid</th>
+                </tr>
+              </thead>
+              <tbody id="Offense">
+              </tbody>
+            </table>
+          </div>
+          
+          <!--- NORMAL HOMEPAGE AND ITS FUNCTIONS------------------------------------------------------------------------------------------>
+
+          <div id="home3"  style="position:relative; top :0 ;width:325px; float: right; display: none">
+            <hr/>
+            <button onclick="registeruse()" name="RegisterU" style="vertical-align:left"> Register User </button><br>
+            <button onclick="searchoffense()" name="ExistingU" style="vertical-align:left"> Existing User? </button><br>
+            <button onclick="App.policeauthorise()" name="Police" style="vertical-align: left"> Are you a Police Officer?</button><br>
+            <br><br><br><br><br>
+            
+          </div>
+          <!--
+          <div id="AreaPolice" style="position : absolute; top: 0.5; width:200px;float:right; alignment-baseline: central; display: none">
+            <label>Officers in your area are :</label>
+          </div> -->
+
+          
+
+          <div id="register" style="width: 300px; float: right; display :none"> <!--style="display: none;"-->
+            <hr/>
+            <h3><b><u>       Register User</b></h3></u> <br><br>
+            <form onsubmit="App.RegisterUser(); return false;" name="Register User">
+            <div class="form-group">
+              <label for="newlicense">Enter license number:</label><br>
+              <input type="text" id="newlicense" name="license"><br>
+              <label for="newusername">Enter name:</label><br>
+              <input type="text" id="newusername" name="uname"><br>
+              <label for="newvehicle">Enter vehicle number:</label><br>
+              <input type="text" id="newvehicle" name="vehiclenum"><br>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <hr/>
+            </form> 
+          </div>
+
+          <div id="ExistingU" style="width: 450px; float: right;display: none">
+            <hr/>
+            <h3><b><u>      Search Offense</u></b></h3><br><br>
+            <form name="Search Offense" target="_blank" onsubmit="App.ViewUserOffense(); return false;" >
+              <label for="username"> Enter name :</label><br>
+              <input type="text" id="username" name="username"><br>
+              <label for="licensenum">Enter license number :</label><br>
+              <input type="text" id="licensenum" name="licensenum"><br>
+              <button type="submit" class="btn btn-primary">Search Offense</button><br>
+            <hr/>
+            </form>
+          </div>
+
+          <div id="policehome" style="width:300px;float:right;display: none">
+            <button onclick="AddOff()" name="AddOffense"> Add Offense</button><br>
+           <!-- <button onclick="ViewUnp()" name="ViewUnpaid">View Unpaid Fines</button><br> -->
+            <!--<button onclick="RevLicen()" name="RevokeLicense">Revoke License</button><br>-->
+            <button onclick="ViewRecord()" name="ViewRecords"> View Records</button><br>
+            <button onclick="ViewUser()" name="ViewUser"> View all Users </button><br> 
+            <button onclick="AddPoli()" name="AddOfficer"> Add Officer</button><br>
+          </div>
+
+          <div id="paybutton" style="width: 300px; float: right;display: none">
+            <hr/>
+            <button onclick="PayF()" name="Pay Fines"> Pay Fines</button><br>
+          </div>
+
+          <!--- POLICE BUTTONS AND FUNCTIONS ---------------------------------------------------------------------------------------------->
+
+          <div id="addoffens" style="width:300px;float:right;display: none">
+            <h3><b><u>      Add Offense</u></b></h3><br><br>
+            <form name="Add Offense" onsubmit="App.AddOffense(); return false">
+
+              <label for="poffense"> Enter offense id :</label><br>
+              <input type="text" id="poffense" name="poffense"><br>
+              <label for="pvehiclenum">Enter vehicle number :</label><br>
+              <input type="text" id="pvehiclenum" name="pvehiclenum"><br>
+              <label for="parea"> Enter area code :</label><br>
+              <input type="text" id="parea" name="parea"><br>
+              <label for="pofftype"> Enter offense type :</label><br>
+              <input type="text" id="pofftype" name="pofftype"><br>
+              <label for="police_id"> Enter police officer id :</label><br>
+              <input type="text" id="police_id" name="police_id"><br>
+              <label for="plicense"> Enter license number :</label><br>
+              <input type="text" id="plicense" name="plicense"><br>
+              <label for="pdesc"> Enter offense description :</label><br>
+              <input type="text" id="pdesc" name="pdesc"><br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            <hr/>
+            </form>
+          </div>
+
+          <div id="AreaOffenseDisplay" style="width: 450px;float: right; display:none ">
+          <!-- need to insert table w button to pay fine-->
+            <label>Offense Records of your area are mentioned below :</label>
+            <table class="offense table" align="center">
+              <thead>
+                <tr>
+                  <th scope="col">Offense ID</th>
+                  <th scope="col">Vehicle no.</th>
+                  <th scope="col">Area</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Officer ID</th>
+                  <th scope="col">License</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Fine Paid</th>
+                </tr>
+              </thead>
+              <tbody id="areaOffense">
+              </tbody>
+            </table>
+          </div>
+          
+
+          <!-- <div id="Revoke" style="width: 300px;float: right;display: none">
+            <h3><b><u>      Revoke License</u></b></h3><br>
+            <form name="rev" target="_blank" onsubmit="App.revoke(); return false">
+              <label for="revlic"> Enter license number :</label>
+              <input type="text" id="revoke" name="revoke"><br>
+               <button type="submit" class="btn btn-primary">Submit</button>
+            <hr/>
+            </form>
+          </div> -->
+
+          <div id="AllUserDisplay" style="width: 425px;float: right; display:none ">
+          <!-- need to insert table w button to pay fine-->
+            <label>Registered Users are mentioned below :</label>
+            <table class="user table" align="center">
+              <thead>
+                <tr>
+                  <th scope="col">License</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Vehicle no.</th>
+                  <th scope="col">Offense COunt</th>
+                  <th scope="col">License Status</th>
+                </tr>
+              </thead>
+              <tbody id="alluser">
+              </tbody>
+            </table>
+          </div>
+
+          <div id="addofficer" style="width: 300px;float: right;display: none">
+            <h3><b><u>      Add Officer</u></b></h3><br><br>
+            <form name="Add Officer" onsubmit="App.AddOfficer(); return false">
+
+              <label for="pofficer"> Enter police officer id :</label><br>
+              <input type="text" id="pofficer" name="pofficer"><br>
+              <label for="pname">Enter name :</label><br>
+              <input type="text" id="pname" name="pname"><br>
+              <label for="polarea"> Enter jurisdiction area :</label><br>
+              <input type="text" id="polarea" name="polarea"><br>
+              <label for="pdesig"> Enter designation :</label><br>
+              <input type="text" id="pdesig" name="pdesig"><br>
+              <label for="pacc"> Enter account address :</label><br>
+              <input type="text" id="pacc" name="pacc"><br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            <hr/>
+            </form>
+          </div>
+
+          <!--- EXISTING USER FUNCTIONS AND PAGES ------------------------------------------------------------------------------------->
+          
+          
+
+          <div id="payfine" style="width: 525px;float: right;display: none">
+            <h3><u>Pay fine</u></h3>
+            <form name="offensesearch" onsubmit="App.showfine(); return false">
+            <label for="offenseid">Enter Offense ID:</label><br>
+            <input type="text" id="offenseid" name="offenseid"><br>
+            <button  type="submit" class="btn btn-primary">Show Fine amount</button>
+            </form>
+          </div> 
+
+          <div id="Fine" style="width: 525px;float: right;display: none">
+            <h5><b><u>Offense details :</u></b></h5>
+            <table align="center" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Offense ID</th>
+                  <th scope="col">Fine Amount (in eth)</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="finedetail"></tbody>
+            </table>
+          </div>
+
+          <div id="buttonpay" style="width: 525px;float: right;display: none">
+            <button onclick="App.payfine()" name="pay"> Pay Now! </button><br>
+          </div>
+          <!--<div id="UnpaidUser" style="width: 300px;float: right; display:none ">
+           need to insert table w button to pay fine
+            <label>Unpaid fines are mentioned below :</label>
+            <table class="user table" align="center">
+              <thead>
+                <tr>
+                  <th scope="col">Offense ID</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Police ID</th>                 
+                  <th scope="col">License</th>
+                </tr>
+              </thead>
+              <tbody id="unpaiduser">
+              </tbody>
+            </table>
+          </div> -->
+          <div id="errorcheck" style="position: relative ;display:none">
+            <p id="errorcheck1" style="position: fixed; bottom: 0; width:1250px; text-align: center">flag</p>
+          </div> 
+
+          <div id="AuthorisationError" style="width:325px;float: right;display: none">
+            <label>Invalid account, please reload with the necessary credentials.</label>
+          </div>
+
+
+          <!-- JAVASCRIPT FUNCTIONS ----------------------------------------------------------------------------------------------------->
+          
+          <script>
+          var home1=document.getElementById("home1");
+          var home2=document.getElementById("home2");
+          var main=document.getElementById("main");
+          var poldisp=document.getElementById("policedisplay");
+            
+            var q=document.getElementById("DCP");
+              var addare=document.getElementById("AddArea");
+              var replace=document.getElementById("Replace");
+              var allpol=document.getElementById("AllPolice");
+              var offense=document.getElementById("OffenseDisplay");
+
+            var  home3= document.getElementById("home3");
+            
+              var register = document.getElementById("register");
+              
+              var existing=document.getElementById("ExistingU");
+                var offense1=document.getElementById("OffenseDisplay1");
+                var finepay=document.getElementById("payfine");
+                var fin=document.getElementById("Fine");
+                var pay=document.getElementById("paybutton");
+              
+              var polihome=document.getElementById("policehome");
+                var addoffens=document.getElementById("addoffens");           //var i=document.getElementById("Revoke");
+                var addoff=document.getElementById("addofficer");
+                var areaoffens=document.getElementById("AreaOffenseDisplay");
+                var o=document.getElementById("AllUserDisplay");
+            var area=document.getElementById("areac").value;
+           //var area=$("#areac").val();
+          // var num=(area);
+           /*function home(){
+
+           }*/
+
+          function registeruse() {
+            register.style.display = "block";
+            home3.style.display ="none";
+           // z.append(a);
+          } 
+          function Display(){
+            main.style.display="none";
+            poldisp.style.display="none";
+           App.areaExists();
+           
+          }
+          /*function displayhome(){
+            home3.style.display="block";
+            App.viewAreaPol();
+          }*/
+          function AreaAdd(){
+            main.style.display="none";
+            addare.style.display="block";
+          }
+          function ACPreplace(){
+            q.style.display="none";
+            replace.style.display="block";
+          }
+
+          function AllPolice(){
+            q.style.display="none";
+            
+            App.viewAllPol();
+           
+             allpol.style.display="block";
+          }
+
+          function AllOffense(){
+            q.style.display="none";
+            offense.style.display="block";
+            App.ViewAllOffense();
+          }
+
+          function searchoffense(){
+            home3.style.display ="none";
+            existing.style.display="block";
+          }
+
+          function DisplayUserOffense(){
+            existing.style.display="none";
+
+            offense.style.display="block";
+            App.ViewUserOffense();
+           // App.searchoffense();
+          }
+
+          function PayF(){
+            finepay.style.display="block";
+            existing.style.display="none";
+            pay.style.display="none";
+          }
+
+          function showfine(){
+            var fi=App.amount;
+            document.getElementById("amoun")=fi;
+            fin.style.display="block";
+          }
+
+          function Police(){
+            home3.style.display="none";
+            App.policeauthorise();
+          }
+
+          function AddOff(){
+            //home2.style.display="none";
+            //home1.style.display="none";
+            polihome.style.display="none";
+            addoffens.style.display="block";
+          }
+
+          /*function RevLicen(){
+            k.style.display="none";
+            i.style.display="block";
+          }*/
+
+          function AddPoli(){
+            polihome.style.display="none";
+            App.acpauthorise();
+            }
+
+          function ViewRecord(){
+            polihome.style.display="none";
+            offense.style.display="block";
+            App.ViewAreaOffense();
+          }
+
+          function ViewUser(){
+            polihome.style.display="none";
+            
+            App.ViewUsers();
+          }
+
+          function ViewUnp(){
+            
+            polihome.style.display="none";
+            n.style.display="block";
+            App.ViewUnpaid();
+          }
+
+          </script>
+
+          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+          <!-- Include all compiled plugins (below), or include individual files as needed -->
+          <script src="js/bootstrap.min.js"></script>
+         <script src="js/web3.min.js"></script>
+          <script src="js/truffle-contract.js"></script>
+          <script src="js/app.js"></script>
+        </div>
+      </div>
+    </div>
+
+    
+  </body>
+</html>
